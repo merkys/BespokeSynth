@@ -2269,16 +2269,42 @@ namespace
    {
       assert(list);
       const auto& devices = MidiController::GetAvailableInputDevices();
+      std::map<std::string, int> labels;
       for (int i = 0; i < devices.size(); ++i)
-         list->AddLabel(devices[i].c_str(), i);
+      {
+         std::string label = devices[i].c_str();
+         std::string label_stem = label;
+         while (labels.count(label))
+         {
+            label_stem = label;
+            label = label + " (" + ofToString(labels[label] + 1) + ")";
+         }
+         if (labels.count(label_stem))
+            labels[label_stem]++;
+         labels[label] = 1;
+         list->AddLabel(label, i);
+      }
    }
 
    void FillMidiOutput(DropdownList* list)
    {
       assert(list);
       const auto& devices = MidiController::GetAvailableOutputDevices();
+      std::map<std::string, int> labels;
       for (int i = 0; i < devices.size(); ++i)
-         list->AddLabel(devices[i].c_str(), i);
+      {
+         std::string label = devices[i].c_str();
+         std::string label_stem = label;
+         while (labels.count(label))
+         {
+            label_stem = label;
+            label = label + " (" + ofToString(labels[label] + 1) + ")";
+         }
+         if (labels.count(label_stem))
+            labels[label_stem]++;
+         labels[label] = 1;
+         list->AddLabel(label, i);
+      }
    }
 }
 
